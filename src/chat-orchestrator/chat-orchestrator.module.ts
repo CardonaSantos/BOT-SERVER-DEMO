@@ -5,7 +5,6 @@ import { EmpresaModule } from 'src/empresa/empresa.module';
 import { ClienteModule } from 'src/cliente/cliente.module';
 import { ChatModule } from 'src/chat/chat.module';
 import { KnowledgeModule } from 'src/knowledge/knowledge.module';
-import { FireworksIaModule } from 'src/fireworks-ia/fireworks-ia.module';
 import { WhatsappMessageModule } from 'src/whatsapp/chat/chat.module';
 import { CloudStorageDoSpacesModule } from 'src/cloud-storage-dospaces/cloud-storage-dospaces.module';
 import { WhatsappApiClientModule } from 'src/whatsapp-api-meta/whatsapp-api-client.module';
@@ -13,7 +12,7 @@ import { BroadCastMessageService } from './app/broadcast-message.service';
 import { AgentChatController } from './presentation/agent-chat.controller';
 import { PrismaModuleModule } from 'src/prisma/prisma-module/prisma-module.module';
 import { SendHumanTextService } from './app/send-human-text.service';
-import { OpenAiModule } from 'src/fireworks-ia/open-ai.module';
+import { OpenAiModule } from 'src/open-ia/open-ia.module';
 
 @Module({
   imports: [
@@ -23,7 +22,6 @@ import { OpenAiModule } from 'src/fireworks-ia/open-ai.module';
     ClienteModule,
     ChatModule,
     KnowledgeModule,
-    FireworksIaModule,
     WhatsappMessageModule,
     CloudStorageDoSpacesModule,
     WhatsappApiClientModule,

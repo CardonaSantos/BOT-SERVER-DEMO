@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { EmpresaService } from 'src/empresa/app/empresa.service';
 import { ClienteService } from 'src/cliente/app/cliente.service';
 import { ChatService } from 'src/chat/app/chat.service';
-import { FireworksIaService } from 'src/fireworks-ia/app/fireworks-ia.service';
 import {
   ChatChannel,
   ChatRole,
@@ -21,7 +20,7 @@ import { WhatsappApiMetaService } from 'src/whatsapp-api-meta/app/whatsapp-api-m
 import { BroadCastMessageService } from './broadcast-message.service';
 import { dayjs } from 'src/Utils/dayjs.config';
 import { TZGT } from 'src/Utils/TZGT';
-import { OpenAiIaService } from 'src/fireworks-ia/app/open-ia-rag.service';
+import { OpenAiIaService } from 'src/open-ia/app/open-ia-rag.service';
 import { ChatCompletionMessageParam } from 'openai/resources/index';
 
 export interface IncomingMessageDto {

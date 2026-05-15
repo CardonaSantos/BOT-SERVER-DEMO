@@ -1,7 +1,5 @@
 import { Inject, Injectable, Logger, NotFoundException } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma-service/prisma-service.service';
 import { KnowledgeDocumentType } from '@prisma/client';
-import { FireworksIaService } from 'src/fireworks-ia/app/fireworks-ia.service';
 import {
   KNOWLEDGE_REPOSITORY,
   KnowledgeRepository,
@@ -24,9 +22,6 @@ export interface KnowledgeSearchResult {
 export class KnowledgeService {
   private readonly logger = new Logger(KnowledgeService.name);
   constructor(
-    private readonly prisma: PrismaService,
-    private readonly fireworksIa: FireworksIaService,
-
     @Inject(KNOWLEDGE_REPOSITORY)
     private readonly repo: KnowledgeRepository,
   ) {}
@@ -120,48 +115,48 @@ export class KnowledgeService {
       return [];
     }
 
-    try {
-      const embedding = await this.fireworksIa.getEmbedding(query);
-      const vectorLiteral = JSON.stringify(embedding);
+    // try {
+    //   const embedding = await this.fireworksIa.getEmbedding(query);
+    //   const vectorLiteral = JSON.stringify(embedding);
 
-      const rawLimit = limit * 3; // overfetch
+    //   const rawLimit = limit * 3; // overfetch
 
-      const rows = await this.prisma.$queryRawUnsafe<KnowledgeSearchResult[]>(
-        `
-      SELECT
-        kc."id",
-        kc."texto",
-        kc."documentId",
-        kc."indice",
-        kd."titulo",
-        kd."tipo",
-        kc."embedding" <-> $2::vector AS "distance"
-      FROM "KnowledgeChunk" kc
-      JOIN "KnowledgeDocument" kd ON kc."documentId" = kd."id"
-      WHERE kd."empresaId" = $1
-      ORDER BY "distance" ASC
-      LIMIT $3
-      `,
-        empresaId,
-        vectorLiteral,
-        rawLimit,
-      );
+    //   const rows = await this.prisma.$queryRawUnsafe<KnowledgeSearchResult[]>(
+    //     `
+    //   SELECT
+    //     kc."id",
+    //     kc."texto",
+    //     kc."documentId",
+    //     kc."indice",
+    //     kd."titulo",
+    //     kd."tipo",
+    //     kc."embedding" <-> $2::vector AS "distance"
+    //   FROM "KnowledgeChunk" kc
+    //   JOIN "KnowledgeDocument" kd ON kc."documentId" = kd."id"
+    //   WHERE kd."empresaId" = $1
+    //   ORDER BY "distance" ASC
+    //   LIMIT $3
+    //   `,
+    //     empresaId,
+    //     vectorLiteral,
+    //     rawLimit,
+    //   );
 
-      const MAX_DISTANCE = 0.45;
+    //   const MAX_DISTANCE = 0.45;
 
-      const filtered = rows
-        .filter((r) => r.distance !== null && r.distance <= MAX_DISTANCE)
-        .sort((a, b) => a.distance - b.distance)
-        .slice(0, limit);
+    //   const filtered = rows
+    //     .filter((r) => r.distance !== null && r.distance <= MAX_DISTANCE)
+    //     .sort((a, b) => a.distance - b.distance)
+    //     .slice(0, limit);
 
-      return filtered;
-    } catch (error) {
-      this.logger.error(
-        `Error RAG search empresa=${empresaId} query="${query.slice(0, 50)}"`,
-        error,
-      );
-      return [];
-    }
+    //   return filtered;
+    // } catch (error) {
+    //   this.logger.error(
+    //     `Error RAG search empresa=${empresaId} query="${query.slice(0, 50)}"`,
+    //     error,
+    //   );
+    //   return [];
+    // }
   }
 
   async getManuals(): Promise<any> {

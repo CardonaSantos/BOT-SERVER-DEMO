@@ -2,12 +2,11 @@ import { Module } from '@nestjs/common';
 import { KnowledgeController } from './presentation/knowledge.controller';
 import { KnowledgeService } from './app/knowledge.service';
 import { PrismaModuleModule } from 'src/prisma/prisma-module/prisma-module.module';
-import { FireworksIaModule } from 'src/fireworks-ia/fireworks-ia.module';
 import { KNOWLEDGE_REPOSITORY } from './domain/knowledge.repository';
 import { PrismaKnowledgeRepository } from './infraestructure/prisma-knowledge.repository';
 
 @Module({
-  imports: [PrismaModuleModule, FireworksIaModule],
+  imports: [PrismaModuleModule],
   controllers: [KnowledgeController],
   providers: [
     KnowledgeService,

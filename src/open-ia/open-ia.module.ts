@@ -4,8 +4,6 @@ import OpenAI from 'openai';
 import { PrismaModuleModule } from 'src/prisma/prisma-module/prisma-module.module';
 import { OpenAiIaService } from './app/open-ia-rag.service';
 import { OPENAI_CLIENT } from './infraestructure/open-ia.client';
-import { CrmService } from 'src/crm/app/crm.service';
-import { HttpModule } from '@nestjs/axios';
 import { CrmModule } from 'src/crm/crm.module';
 import { PosFunctionsModule } from 'src/pos-functions/pos-functions.module';
 

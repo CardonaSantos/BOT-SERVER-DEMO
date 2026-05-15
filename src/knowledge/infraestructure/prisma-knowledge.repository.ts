@@ -4,7 +4,6 @@ import { Knowledge } from '../entities/knowledge.entity';
 import { throwFatalError } from 'src/Utils/CommonFatalError';
 import { PrismaService } from 'src/prisma/prisma-service/prisma-service.service';
 import { KnowledgeDocument, KnowledgeDocumentType } from '@prisma/client';
-import { FireworksIaService } from 'src/fireworks-ia/app/fireworks-ia.service';
 
 @Injectable()
 export class PrismaKnowledgeRepository implements KnowledgeRepository {

@@ -3,7 +3,6 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModuleModule } from './prisma/prisma-module/prisma-module.module';
 import { PrismaService } from './prisma/prisma-service/prisma-service.service';
-import { FireworksIaModule } from './fireworks-ia/fireworks-ia.module';
 import { WhatsappApiMetaModule } from './whatsapp-api-meta/whatsapp-api-meta.module';
 import { KnowledgeModule } from './knowledge/knowledge.module';
 import { EmbeddingsModule } from './embeddings/embeddings.module';
@@ -17,6 +16,7 @@ import { CloudStorageDoSpacesModule } from './cloud-storage-dospaces/cloud-stora
 import { WhatsappMessageModule } from './whatsapp/chat/chat.module';
 import { CrmModule } from './crm/crm.module';
 import { PosFunctionsModule } from './pos-functions/pos-functions.module';
+import { OpenAiModule } from './open-ia/open-ia.module';
 
 @Module({
   imports: [
@@ -25,7 +25,6 @@ import { PosFunctionsModule } from './pos-functions/pos-functions.module';
       // envFilePath: '.env', // Es opcional, ya que por defecto busca .env en la raíz
     }),
     PrismaModuleModule,
-    FireworksIaModule,
     WhatsappApiMetaModule,
     KnowledgeModule,
     EmbeddingsModule,
@@ -38,6 +37,7 @@ import { PosFunctionsModule } from './pos-functions/pos-functions.module';
     CloudStorageDoSpacesModule,
     CrmModule,
     PosFunctionsModule,
+    OpenAiModule,
   ],
   controllers: [AppController],
   providers: [AppService, PrismaService],

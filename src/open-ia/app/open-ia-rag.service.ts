@@ -103,7 +103,7 @@ export class OpenAiIaService {
       return 'Configuración del asistente no disponible en este momento.';
     }
 
-    const model = this.config.get<string>('OPENAI_MODEL') ?? 'gpt-4o-mini';
+    const model = this.config.get<string>('OPENAI_MODEL') ?? 'gpt-5.5';
 
     const temperature = botParams.temperature ?? 0.3;
     const maxTokens = botParams.maxCompletionTokens ?? 512;

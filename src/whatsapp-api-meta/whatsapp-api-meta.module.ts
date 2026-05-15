@@ -1,9 +1,6 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { HttpModule } from '@nestjs/axios';
-import { FireworksIaModule } from 'src/fireworks-ia/fireworks-ia.module';
+import { ConfigModule } from '@nestjs/config';
 import { WhatsappApiMetaController } from './presentation/whatsapp-api-meta.controller';
-import { WhatsappApiMetaService } from './app/whatsapp-api-meta.service';
 import { ChatOrchestratorModule } from 'src/chat-orchestrator/chat-orchestrator.module';
 import { WhatsappApiClientModule } from './whatsapp-api-client.module';
 
