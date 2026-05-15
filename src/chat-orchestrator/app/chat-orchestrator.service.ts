@@ -19,22 +19,10 @@ import { CloudStorageService } from 'src/cloud-storage-dospaces/app/cloud-storag
 import { extFromFilename, extFromMime } from 'src/Utils/extractors';
 import { WhatsappApiMetaService } from 'src/whatsapp-api-meta/app/whatsapp-api-meta.service';
 import { BroadCastMessageService } from './broadcast-message.service';
-import * as dayjs from 'dayjs';
-import 'dayjs/locale/es';
-import * as utc from 'dayjs/plugin/utc';
-import * as timezone from 'dayjs/plugin/timezone';
-import * as isSameOrAfter from 'dayjs/plugin/isSameOrAfter';
-import * as isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
-import * as customParseFormat from 'dayjs/plugin/customParseFormat';
+import { dayjs } from 'src/Utils/dayjs.config';
 import { TZGT } from 'src/Utils/TZGT';
 import { OpenAiIaService } from 'src/fireworks-ia/app/open-ia-rag.service';
 import { ChatCompletionMessageParam } from 'openai/resources/index';
-dayjs.extend(customParseFormat);
-dayjs.extend(utc);
-dayjs.extend(timezone);
-dayjs.extend(isSameOrBefore);
-dayjs.extend(isSameOrAfter);
-dayjs.locale('es');
 
 export interface IncomingMessageDto {
   empresaSlug: string;

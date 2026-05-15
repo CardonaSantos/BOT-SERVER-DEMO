@@ -73,7 +73,7 @@ export class Cliente {
       row.crmUsuarioId ?? null,
       row.botActivo,
 
-      unreadCount, // ✅ Mapeamos el conteo aquí
+      unreadCount,
 
       row.creadoEn,
       row.actualizadoEn,

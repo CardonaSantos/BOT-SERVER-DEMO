@@ -11,6 +11,23 @@ export const selectedCliente = {
   crmUsuarioId: true,
   empresaId: true,
   botActivo: true,
+
+  whatsappHistory: {
+    take: 1,
+    orderBy: {
+      creadoEn: 'desc',
+    },
+
+    select: {
+      body: true,
+      direction: true,
+      mediaMimeType: true,
+      status: true,
+      timestamp: true,
+      type: true,
+    },
+  },
+
   _count: {
     select: {
       whatsappHistory: {

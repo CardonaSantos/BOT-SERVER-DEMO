@@ -7,6 +7,7 @@ import {
 } from '../domain/cliente.repository';
 import { Cliente } from '../entities/cliente.entity';
 import { FindClientesMessagesQuery } from '../dto/dto-pagination';
+import { ChatSidebarItem } from '../dto/responseType';
 
 @Injectable()
 export class ClienteService {
@@ -35,7 +36,7 @@ export class ClienteService {
   }
 
   async getAllClientes(q: FindClientesMessagesQuery): Promise<{
-    data: Cliente[];
+    data: ChatSidebarItem[];
     meta: {
       total: number;
       take: number;

@@ -7,8 +7,8 @@ import { throwFatalError } from 'src/Utils/CommonFatalError';
 import { FindClientesMessagesQuery } from '../dto/dto-pagination';
 import { selectedCliente } from '../selects/select-cliente';
 import { Prisma } from '@prisma/client';
-
 import { dayjs } from '../../Utils/dayjs.config';
+import { mappChatSidebarItem } from '../common/mappers';
 
 const normalize = (s: string) =>
   s
@@ -205,7 +205,7 @@ export class PrismaClienteRepository implements ClienteRepository {
       }),
     ]);
     return {
-      data: rows.map(Cliente.fromPrisma),
+      data: mappChatSidebarItem(rows),
       meta: {
         total,
         take,
