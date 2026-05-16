@@ -52,7 +52,7 @@ export const OPENAI_TOOLS: OpenAI.Responses.Tool[] = [
           maxItems: 5,
         },
       },
-      required: ['producto'],
+      required: ['producto', 'categorias'],
       additionalProperties: false,
     },
   },
