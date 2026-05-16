@@ -11,11 +11,14 @@ export const OPENAI_TOOLS: OpenAI.Responses.Tool[] = [
     type: 'function',
     name: 'crear_ticket_soporte',
     description: 'Crea un ticket de soporte técnico en el CRM',
-    strict: false,
+    strict: true,
     parameters: {
       type: 'object',
       properties: {
-        titulo: { type: 'string', description: 'Título corto del problema' },
+        titulo: {
+          type: 'string',
+          description: 'Título corto del problema',
+        },
         descripcion: {
           type: 'string',
           description: 'Descripción detallada del problema',
@@ -28,15 +31,25 @@ export const OPENAI_TOOLS: OpenAI.Responses.Tool[] = [
   {
     type: 'function',
     name: 'buscar_producto_en_pos',
-    description: 'Consulta el inventario del POS en tiempo real...',
-    strict: false,
+    description:
+      'Consulta el inventario del POS usando un término principal y categorías cortas relacionadas.',
+    strict: true,
     parameters: {
       type: 'object',
       properties: {
-        producto: { type: 'string' },
+        producto: {
+          type: 'string',
+          description:
+            'Término principal de búsqueda. Debe ser corto y concreto. Ej: "iphone", "samsung", "laptop", "teclado".',
+        },
         categorias: {
           type: 'array',
-          items: { type: 'string' },
+          description:
+            'Etiquetas cortas relacionadas. Máximo 5 elementos. Ej: ["telefono", "celular", "smartphone", "apple"].',
+          items: {
+            type: 'string',
+          },
+          maxItems: 5,
         },
       },
       required: ['producto'],
