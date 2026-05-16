@@ -1,6 +1,6 @@
 import { Get, Patch, Param, Delete, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { ChatChannel, WazDirection } from '@prisma/client';
+import { ChatChannel, WazDirection, WazMediaType } from '@prisma/client';
 import { ChatOrchestratorService } from 'src/chat-orchestrator/app/chat-orchestrator.service';
 import { logWhatsAppWebhook } from 'src/Utils/wa-webhook-logger';
 
@@ -26,8 +26,6 @@ export class WhatsappApiMetaController {
   private readonly logger = new Logger(WhatsappApiMetaController.name);
 
   constructor(
-    // private readonly whatsappApiMetaService: WhatsappApiMetaService,
-    // private readonly fireworksIa: FireworksIaService,
     private readonly config: ConfigService,
     private readonly orquestador: ChatOrchestratorService,
   ) {}
@@ -54,10 +52,8 @@ export class WhatsappApiMetaController {
    */
   @Get('webhook')
   verifyWebhook(@Query() query: any, @Res() res: Response) {
-    // LOG CRÍTICO: Ver qué llega realmente (si llega algo)
-    this.logger.log('🔍 Query params recibidos:', JSON.stringify(query));
+    this.logger.log(' Query params recibidos:', JSON.stringify(query));
 
-    // 2. EL ARREGLO MÁGICO: Soportar anidación
     // NestJS suele parsear "hub.mode" como query.hub.mode
     const mode = query['hub.mode'] || query?.hub?.mode;
     const token = query['hub.verify_token'] || query?.hub?.verify_token;
@@ -84,7 +80,7 @@ export class WhatsappApiMetaController {
   @Post('webhook')
   async handleWebhook(@Body() body: any, @Req() req: Request) {
     try {
-      this.logger.debug('📩 Webhook recibido');
+      this.logger.debug('Webhook recibido');
 
       if (body.object !== 'whatsapp_business_account') {
         return;
@@ -106,9 +102,7 @@ export class WhatsappApiMetaController {
             continue;
           }
 
-          // ===============================
-          // 🟢 CASO 1: STATUS UPDATE
-          // ===============================
+          //  CASO 1: STATUS UPDATE
           if (Array.isArray(value?.statuses)) {
             for (const status of value.statuses) {
               await this.orquestador.handleStatusUpdate(status);
@@ -116,9 +110,7 @@ export class WhatsappApiMetaController {
             continue;
           }
 
-          // ===============================
-          // 🟢 CASO 2: MENSAJES ENTRANTES
-          // ===============================
+          //  CASO 2: MENSAJES ENTRANTES
           const messages = value?.messages;
           if (!Array.isArray(messages) || messages.length === 0) {
             continue;
@@ -222,5 +214,39 @@ export class WhatsappApiMetaController {
     } catch (error) {
       this.logger.error('Error en webhook WhatsApp', error);
     }
+  }
+
+  // TESTEO LOCAL
+
+  @Post('message')
+  async sendMessage(@Body() body: { message: string }) {
+    const telefono = '40017273';
+
+    await this.orquestador.handleIncomingMessage({
+      empresaSlug: 'nova-sistemas',
+      empresaNombreFallback: 'Nova Sistemas',
+
+      canal: ChatChannel.WHATSAPP,
+
+      telefono,
+      nombreClienteWhatsApp: 'Test User',
+
+      wamid: `test-${Date.now()}`, // 🔥 IMPORTANTE: único
+      timestamp: BigInt(Math.floor(Date.now() / 1000)),
+      replyToWamid: null,
+
+      direction: WazDirection.INBOUND,
+      to: 'local-test',
+
+      type: WazMediaType.TEXT,
+      texto: body.message,
+
+      media: null,
+    });
+
+    return {
+      ok: true,
+      message: 'Mensaje enviado al orquestador',
+    };
   }
 }

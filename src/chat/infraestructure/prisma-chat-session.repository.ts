@@ -17,17 +17,18 @@ export class PrismaChatSessionRepository implements ChatSessionRepository {
 
     return new ChatSession(
       row.id,
+      row.openaiLastResponseId ?? null,
       row.empresaId,
-      row.clienteId,
+      row.clienteId ?? null,
       row.telefono,
       row.canal,
       row.estado,
-      row.ultimoTicketCrmId,
-      row.ultimoTicketCreadoEn,
-      row.iniciadoEn,
-      row.cerradoEn,
-      row.creadoEn,
-      row.actualizadoEn,
+      row.ultimoTicketCrmId ?? null,
+      row.ultimoTicketCreadoEn ?? null,
+      row.iniciadoEn ?? undefined,
+      row.cerradoEn ?? null,
+      row.creadoEn ?? undefined,
+      row.actualizadoEn ?? undefined,
     );
   }
 
@@ -164,5 +165,25 @@ export class PrismaChatSessionRepository implements ChatSessionRepository {
     } catch (error) {
       throwFatalError(error, this.logger, 'Chat - findLastSession');
     }
+  }
+
+  /**
+   * NUEVO ACTUALIZAR OPENIA ID R.
+   * @param id
+   * @param responseId
+   * @returns
+   */
+  async updateOpenAIResponseId(
+    id: number,
+    responseId: string | null,
+  ): Promise<ChatSession> {
+    const row = await this.prisma.chatSession.update({
+      where: { id },
+      data: {
+        openaiLastResponseId: responseId,
+      },
+    });
+
+    return this.toDomain(row)!;
   }
 }

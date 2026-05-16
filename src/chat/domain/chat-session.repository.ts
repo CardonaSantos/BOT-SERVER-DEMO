@@ -14,6 +14,7 @@ export interface ChatSessionRepository {
     canal: ChatChannel,
   ): Promise<ChatSession | null>;
   closeSession(id: number): Promise<ChatSession>;
+  updateOpenAIResponseId(id: number, responseId: string): Promise<ChatSession>;
 
   findLastSession(id: number): Promise<ChatSession | null>;
 }

@@ -10,17 +10,19 @@ import {
   WazStatus,
 } from '@prisma/client';
 import { KnowledgeService } from 'src/knowledge/app/knowledge.service';
-import { extname } from 'path';
 import { generarKeyWhatsapp } from 'src/Utils/enrutador-dospaces';
 import { WhatsAppMessageService } from 'src/whatsapp/chat/app/whatsapp-chat.service';
 import { MetaWhatsAppMediaService } from 'src/whatsapp/chat/app/meta-media.service';
 import { CloudStorageService } from 'src/cloud-storage-dospaces/app/cloud-storage-dospaces.service';
-import { extFromFilename, extFromMime } from 'src/Utils/extractors';
+import { extFromMime } from 'src/Utils/extractors';
 import { WhatsappApiMetaService } from 'src/whatsapp-api-meta/app/whatsapp-api-meta.service';
 import { BroadCastMessageService } from './broadcast-message.service';
 import { dayjs } from 'src/Utils/dayjs.config';
 import { TZGT } from 'src/Utils/TZGT';
-import { OpenAiIaService } from 'src/open-ia/app/open-ia-rag.service';
+import {
+  OpenAiIaService,
+  ReplyResult,
+} from 'src/open-ia/app/open-ia-rag.service';
 import { ChatCompletionMessageParam } from 'openai/resources/index';
 
 export interface IncomingMessageDto {
@@ -70,12 +72,9 @@ export class ChatOrchestratorService {
   ) {}
 
   /**
-   * Punto central:
-   * - Asegura empresa
-   * - Asegura cliente por teléfono
-   * - Asegura sesión abierta
-   * - Guarda mensaje del usuario
-   * - Busca contexto y responde
+   *
+   * @param params DATOS: E
+   * @returns
    */
   async handleIncomingMessage(params: IncomingMessageDto) {
     const {
@@ -121,7 +120,7 @@ export class ChatOrchestratorService {
 
     const isDesactivated = !cliente.botActivo;
 
-    // PREPARAR TODO
+    // nuevo
     const session = await this.chatService.ensureOpenSession({
       empresaId: empresa.id,
       clienteId: cliente.id,
@@ -227,75 +226,42 @@ export class ChatOrchestratorService {
       return { status: 'saved_silent', userMessage };
     }
 
-    const history = await this.chatService.getLastMessages(session.id!);
-
-    const formattedHistory: ChatCompletionMessageParam[] = history.map((m) => {
-      const role =
-        m.rol === ChatRole.USER ? ('user' as const) : ('assistant' as const);
-
-      // A. Si es el BOT
-      if (role === 'assistant') {
-        return {
-          role,
-          content: m.contenido ?? '',
-        };
-      }
-
-      // B. Si es USUARIO, verificamos si tenía foto guardada
-      if (role === 'user') {
-        if (m.mediaUrl) {
-          return {
-            role,
-            content: [
-              { type: 'text', text: m.contenido ?? '' }, //  (caption)
-              {
-                type: 'image_url',
-                image_url: {
-                  url: m.mediaUrl,
-                  detail: 'auto',
-                },
-              },
-            ],
-          };
-        }
-
-        // Opción B2: Solo texto
-        return {
-          role,
-          content: m.contenido ?? '',
-        };
-      }
-
-      // Fallback
-      return { role: 'user', content: '' };
-    });
-
-    let reply = '';
+    let reply: ReplyResult = { reply: '', responseId: '' };
     const manual = await this.knowledgeService.getManuals();
+    this.logger.log(
+      `LOS MANUALES RECUPERADOS SON:\n${JSON.stringify(manual, null, 2)}`,
+    );
     try {
       // LLAMADA AL SERVICIO ACTUALIZADA
       reply = await this.openIA.replyWithContext({
         empresaNombre: empresa.nombre,
-        history: formattedHistory,
+        manual,
         question: textWithMedia,
         imageUrls: mediaUrls,
-        manual: manual,
+        previousResponseId: session.openaiLastResponseId ?? null,
       });
+
+      await this.chatService.updateSessionOpenAIResponseId(
+        session.id!,
+        reply.responseId,
+      );
     } catch (e) {
       this.logger.error('Error OpenAI', e);
-      reply =
-        'En este momento no puedo responder automáticamente. Un asesor te apoyará.';
+      reply = {
+        reply: 'Errror procesando la solicitud: Catcheo',
+        responseId: 'responseId',
+      };
     }
 
     const botMessage = await this.chatService.addMessage({
       sessionId: session.id!,
       rol: ChatRole.ASSISTANT,
-      contenido: reply,
+      contenido: reply.reply,
     });
 
     const { wamid: outWamid } = await this.whatsappApiMetaService.sendText(
       telefono,
-      reply,
+      reply.reply,
     );
 
     const outMsg = await this.whatsappMessage.upsertByWamid({
@@ -308,7 +274,7 @@ export class ChatOrchestratorService {
       to: telefono,
 
       type: WazMediaType.TEXT,
-      body: reply,
+      body: reply.reply,
 
       status: outWamid ? WazStatus.SENT : WazStatus.FAILED,
       replyToWamid: wamid,

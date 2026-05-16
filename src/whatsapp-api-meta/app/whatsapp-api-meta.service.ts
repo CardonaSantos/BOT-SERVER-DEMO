@@ -1,9 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { CreateWhatsappApiMetaDto } from '../dto/create-whatsapp-api-meta.dto';
-import { UpdateWhatsappApiMetaDto } from '../dto/update-whatsapp-api-meta.dto';
 import { HttpService } from '@nestjs/axios';
 import { throwFatalError } from 'src/Utils/CommonFatalError';
-import { WazMediaType } from '@prisma/client';
 type MetaSendMessageResponse = {
   messaging_product: 'whatsapp';
   contacts?: { input: string; wa_id: string }[];

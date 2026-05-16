@@ -1,37 +1,19 @@
-// agent-chat.controller.ts
 import {
   Body,
   Controller,
   Post,
-  NotFoundException,
   Logger,
   UseInterceptors,
   UploadedFile,
 } from '@nestjs/common';
-
-import {
-  ChatRole,
-  WazDirection,
-  WazMediaType,
-  WazStatus,
-} from '@prisma/client';
-import * as crypto from 'crypto';
-import { ChatService } from 'src/chat/app/chat.service';
-import { ClienteService } from 'src/cliente/app/cliente.service';
-import { PrismaService } from 'src/prisma/prisma-service/prisma-service.service';
-import { WhatsappApiMetaService } from 'src/whatsapp-api-meta/app/whatsapp-api-meta.service';
-import { WhatsAppMessageService } from 'src/whatsapp/chat/app/whatsapp-chat.service';
-import { SendHumanTextService } from '../app/send-human-text.service';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { PrismaService } from 'src/prisma/prisma-service/prisma-service.service';
+import { SendHumanTextService } from '../app/send-human-text.service';
 
 @Controller('agent/chat')
 export class AgentChatController {
   private readonly logger = new Logger(AgentChatController.name);
   constructor(
-    // private readonly whatsappApi: WhatsappApiMetaService,
-    // private readonly whatsappMessage: WhatsAppMessageService,
-    // private readonly clienteService: ClienteService,
-    // private readonly chatService: ChatService,
     private readonly prisma: PrismaService,
     private readonly humanResponse: SendHumanTextService,
   ) {}

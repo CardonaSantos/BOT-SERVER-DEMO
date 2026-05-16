@@ -192,6 +192,8 @@ model ChatSession {
   flowContext  Json?
 
 
+  openaiLastResponseId String? @db.VarChar(255)
+
   @@index([empresaId, telefono, canal, estado])
 }
 
@@ -249,7 +251,7 @@ model KnowledgeChunk {
   indice     Int
   texto      String
 
-  embedding  Unsupported("vector(4096)")
+  embedding  String?
   tokens     Int?
 
   creadoEn       DateTime @default(now())

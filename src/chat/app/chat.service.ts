@@ -88,6 +88,38 @@ export class ChatService {
     return this.messageRepo.create(message);
   }
 
+  // async updateSessionOpenAIResponseId(
+  //   sessionId: number,
+  //   responseId: string | null,
+  // ): Promise<void> {
+  //   const session = await this.sessionRepo.findById(sessionId);
+
+  //   if (!session) {
+  //     this.logger.warn(
+  //       `Session ${sessionId} no encontrada para actualizar responseId`,
+  //     );
+  //     return;
+  //   }
+
+  //   session.setOpenAIResponseId(responseId);
+
+  //   await this.sessionRepo.update(sessionId, {
+  //     openaiLastResponseId: responseId,
+  //   });
+  // }
+
+  /**
+   * NUEVO METODO DE ACTUALIZACION
+   * @param sessionId
+   * @param responseId
+   */
+  async updateSessionOpenAIResponseId(
+    sessionId: number,
+    responseId: string | null,
+  ): Promise<void> {
+    await this.sessionRepo.updateOpenAIResponseId(sessionId, responseId);
+  }
+
   async addMediaUrlToMessage(messageId: number, mediaUrl: string) {
     return await this.messageRepo.addMediaUrlToMessage(messageId, mediaUrl);
   }
@@ -111,4 +143,6 @@ export class ChatService {
   async removeChatsAndSesions(clienteId: number) {
     return await this.removeChatsAndSesions(clienteId);
   }
+
+  // MIGRACOIN MASIVA
 }
