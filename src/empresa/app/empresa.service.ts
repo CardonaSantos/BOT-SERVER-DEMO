@@ -45,8 +45,8 @@ export class EmpresaService {
   }
 
   // útil para el bot: si no existe, la crea
-  async ensureBySlug(slug: string, nombre: string): Promise<Empresa> {
-    return this.repo.upsertBySlug(slug, nombre);
+  async ensureBySlug(): Promise<Empresa> {
+    return this.repo.upsertBySlug();
   }
 
   async update(id: number, dto: UpdateEmpresaDto): Promise<Empresa> {

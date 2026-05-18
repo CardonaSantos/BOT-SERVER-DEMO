@@ -26,8 +26,8 @@ import {
 import { ChatCompletionMessageParam } from 'openai/resources/index';
 
 export interface IncomingMessageDto {
-  empresaSlug: string;
-  empresaNombreFallback: string;
+  // empresaSlug: string;
+  // empresaNombreFallback: string;
   canal: ChatChannel;
 
   telefono: string;
@@ -78,8 +78,8 @@ export class ChatOrchestratorService {
    */
   async handleIncomingMessage(params: IncomingMessageDto) {
     const {
-      empresaSlug,
-      empresaNombreFallback,
+      // empresaSlug,
+      // empresaNombreFallback,
       telefono,
       texto,
       canal,
@@ -94,10 +94,7 @@ export class ChatOrchestratorService {
     }
 
     //  Empresa
-    const empresa = await this.empresaService.ensureBySlug(
-      empresaSlug,
-      empresaNombreFallback,
-    );
+    const empresa = await this.empresaService.ensureBySlug();
 
     //  Cliente
     let cliente = await this.clienteService.findByEmpresaAndTelefono(

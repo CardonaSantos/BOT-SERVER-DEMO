@@ -63,11 +63,12 @@ export class PrismaEmpresaRepository implements EmpresaRepository {
     return this.toDomain(row);
   }
 
-  async upsertBySlug(slug: string, nombre: string): Promise<Empresa> {
-    const row = await this.prisma.empresa.upsert({
-      where: { slug },
-      update: { nombre },
-      create: { slug, nombre },
+  async upsertBySlug() // slug: string, nombre: string
+
+  : Promise<Empresa> {
+    const row = await this.prisma.empresa.findFirst({
+      // update: { nombre },
+      // create: { slug, nombre },
     });
     return this.toDomain(row);
   }

@@ -88,26 +88,6 @@ export class ChatService {
     return this.messageRepo.create(message);
   }
 
-  // async updateSessionOpenAIResponseId(
-  //   sessionId: number,
-  //   responseId: string | null,
-  // ): Promise<void> {
-  //   const session = await this.sessionRepo.findById(sessionId);
-
-  //   if (!session) {
-  //     this.logger.warn(
-  //       `Session ${sessionId} no encontrada para actualizar responseId`,
-  //     );
-  //     return;
-  //   }
-
-  //   session.setOpenAIResponseId(responseId);
-
-  //   await this.sessionRepo.update(sessionId, {
-  //     openaiLastResponseId: responseId,
-  //   });
-  // }
-
   /**
    * NUEVO METODO DE ACTUALIZACION
    * @param sessionId

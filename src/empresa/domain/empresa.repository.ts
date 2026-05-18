@@ -7,6 +7,6 @@ export interface EmpresaRepository {
   update(id: number, data: Partial<Empresa>): Promise<Empresa>;
   findById(id: number): Promise<Empresa | null>;
   findBySlug(slug: string): Promise<Empresa | null>;
-  upsertBySlug(slug: string, nombre: string): Promise<Empresa>;
+  upsertBySlug(): Promise<Empresa>;
   findAll(): Promise<Empresa[]>;
 }

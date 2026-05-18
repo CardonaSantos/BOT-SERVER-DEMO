@@ -191,8 +191,8 @@ export class WhatsappApiMetaController {
             }
 
             await this.orquestador.handleIncomingMessage({
-              empresaSlug: 'nova-sistemas',
-              empresaNombreFallback: 'Nova Sistemas',
+              // empresaSlug: 'nova-sistemas',
+              // empresaNombreFallback: 'Nova Sistemas',
               telefono: message.from,
               nombreClienteWhatsApp: profileName,
               canal: ChatChannel.WHATSAPP,
@@ -223,8 +223,8 @@ export class WhatsappApiMetaController {
     const telefono = '40017273';
 
     await this.orquestador.handleIncomingMessage({
-      empresaSlug: 'nova-sistemas',
-      empresaNombreFallback: 'Nova Sistemas',
+      // empresaSlug: 'nova-sistemas',
+      // empresaNombreFallback: 'Nova Sistemas',
 
       canal: ChatChannel.WHATSAPP,
 
